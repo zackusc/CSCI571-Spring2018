@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Homework 4</title>
+
+<script type="text/javascript">
+function viewJSON(what) {
+    var URL = what.URL.value;
+    
+    function loadJSON(url) {
+        var xmlhttp = new XMLHttpRequest(); 
+        try {
+            xmlhttp.open("GET", url, false); 
+            xmlhttp.send();
+            if(xmlhttp.status == 200) {
+                jsonDoc=xmlhttp.responseText;
+                return jsonDoc;
+            } else {
+                alert("ERROR: The JSON file does not exist!\nPlease enter a valid URL.");
+            }
+        }
+        catch(err) {
+            alert("ERROR: The JSON file does not exist!\nPlease enter a valid URL.");
+        }
+    }
+    
+    if(URL == "") {
+        alert("ERROR: The JSON file name cannot be empty!\nPlease enter a valid URL.");
+    } else {
+        jsonDoc = loadJSON(URL);
+    }
+    
+    if(jsonDoc) {
+        jsonObj = JSON.parse(jsonDoc);
+    
+        if(!jsonObj.Mainline.Table.Row || jsonObj.Mainline.Table.Row.length == 0) {
+            alert("ERROR: The JSON file contains NO trucking companies!\nPlease re-enter a URL.");
+        } else {
+            jsonObj.onload = generateHTML(jsonObj);
+            hWin = window.open("", "Assignment4", "width=1000, height=800");
+            hWin.document.write(html_text);
+            hWin.document.close();
+        }
+    }
+    jsonDoc = null;
+}
+
+
+function generateHTML(jsonObj) {
+    //root = jsonObj.documentElement;
+    html_text = "<html><head><title>Top Trucking Companies</title></head><body>";
+    html_text += "<table border='2'>";
+    html_text += "<tbody>";
+    companies = jsonObj.Mainline.Table.Row; //an array of companies
+    headers = jsonObj.Mainline.Table.Header.Data;
+    
+    html_text += "<tr>"
+    //output the headers
+    for(i = 0; i < headers.length; i++) {
+        html_text += "<th>" + headers[i] + "</th>";
+    }
+    html_text += "</tr>"
+    //output the values
+    for(i = 0; i < companies.length; i++) {
+        currNode = companies[i];
+        var companyKeys = Object.keys(currNode); //get properties of a company
+        html_text += "<tr>"; //start a new row of the output table
+        for(j = 0; j < headers.length; j++) {
+            if(companyKeys[j] == "Hubs") {
+                html_text += "<td><ul>"
+                for(k = 0; k < currNode.Hubs.Hub.length; k++) {
+                    currNode.Hubs.Hub[k] = currNode.Hubs.Hub[k] ? currNode.Hubs.Hub[k] : ""; 
+                    if(k == 0) {
+                        html_text += "<li><b>" + currNode.Hubs.Hub[k] + "</b></li>";
+                    } else {
+                        html_text += "<li>" + currNode.Hubs.Hub[k] + "</li>";
+                    }
+                }
+                html_text += "</ul></td>"
+        
+            } else if(!currNode[companyKeys[j]]) { //if the value of the tag is null
+                html_text += "<td></td>"
+            } else if(companyKeys[j] == "HomePage") {
+                html_text += "<td><a href ='" + currNode.HomePage + "'>" + currNode.HomePage
+                             + "</a></td>";
+            } else if(companyKeys[j] == "Logo") {
+                    html_text += "<td><img src ='" + currNode.Logo + "'width=300 height=150></td>";
+            } else {
+                html_text += "<td>" + currNode[companyKeys[j]] + "</td>"
+            }
+            
+        }
+        html_text += "</tr>";
+
+
+    }
+    html_text += "</tbody>";
+    html_text += "</table>";
+    html_text += "</body></html>";
+}
+
+
+</script>
+
+</head>
+
+<body>
+    <h1 style="text-align: center;margin-top: 100px;font-size: 18px">Enter URL for Trucking List JSON File</h1>
+    <form name="myform" method="post" style="text-align: center">
+        <input type="text" name="URL" maxlength="255" size="25" value="truckinglist.json">
+        <br>
+        <input type="button" name="submit" value="Submit Query" onclick="viewJSON(this.form)" style="margin-top: 15px">
+    </form>
+</body>
+</html>
