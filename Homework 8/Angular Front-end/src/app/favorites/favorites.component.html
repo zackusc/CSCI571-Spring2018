@@ -1,0 +1,67 @@
+<div *ngIf="getStorageLength(); else warning">
+  <div class="text-right">
+    <!--Details button-->
+    <button type="button" class="btn btn-outline-secondary text-dark"
+            [disabled]="!detailsService.searchTriggered"
+            (click)="onReturnToDetails()">
+      Details <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <table class="table table-hover">
+    <tr>
+      <th>#</th>
+      <th>Category</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Favorite</th>
+      <th>Details</th>
+    </tr>
+
+    <tr *ngFor="let result of getActivePage(); index as i"
+        [class.selected]="result.place_id === detailsService.selectedPlaceId">
+      <td>{{ i + 1 }}</td>
+      <td><img src={{result.icon}} width="60px" height="40px"></td>
+      <td>{{result.name}}</td>
+      <td>{{result.vicinity}}</td>
+      <!--favorite button-->
+      <td>
+        <button type="button" class="btn btn-outline-secondary text-dark"
+                (click)="removeFromFavorites(result.place_id)">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+      <!--details button-->
+      <td>
+        <button type="button"
+                class="btn btn-outline-secondary text-dark"
+                (click)="triggerDetailsSearch(result)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+<ng-template #warning>
+  <div class="alert alert-warning" role="alert">
+    No record.
+  </div>
+</ng-template>
+
+<!--<p>page {{activePageNum}}</p>-->
+
+<div class="text-center">
+  <button type="button" class="btn btn-outline-secondary text-dark"
+          *ngIf="activePageNum != 1"
+          (click)="activePageNum = activePageNum - 1">
+    previous
+  </button>
+
+  <button type="button" class="btn btn-outline-secondary text-dark"
+          *ngIf="hadNextPage()"
+          (click)="activePageNum = activePageNum + 1">
+    next
+  </button>
+</div>

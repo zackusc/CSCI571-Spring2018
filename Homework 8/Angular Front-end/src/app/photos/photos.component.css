@@ -1,0 +1,17 @@
+/*@media (min-width: 1000px){*/
+  /*.card-columns {*/
+    /*-webkit-column-count: 4;*/
+    /*-moz-column-count: 4;*/
+    /*column-count: 4;*/
+  /*}*/
+/*}*/
+
+.photo {
+  padding: 5px;
+  border: 1px solid #d3d3d3;
+  margin-bottom: 10px;
+}
+
+.photo-column {
+  padding: 0 0 0 10px;
+}

@@ -1,0 +1,102 @@
+<br>
+
+<div *ngIf="details">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <tr *ngIf="details['formatted_address']">
+        <th>Address</th>
+        <td>{{details['formatted_address']}}</td>
+      </tr>
+      <tr *ngIf="details['international_phone_number']">
+        <th class="text-truncate">Phone Number</th>
+        <td>{{details['international_phone_number']}}</td>
+      </tr>
+      <tr *ngIf="details['price_level']">
+        <th>Price Level</th>
+        <td>{{ getPriceLevelDollarNotation() }}</td>
+      </tr>
+      <tr *ngIf="details['rating']">
+        <th>Rating</th>
+        <td>
+          {{details['rating']}}
+
+          <ng-template #star let-fill="fill">
+        <span class="star" [class.full]="fill === 100">
+          <span class="half" [style.width.%]="fill">&#9733;</span>
+          <span class="underlayer">&#9733;</span>
+        </span>
+          </ng-template>
+
+          <ngb-rating [starTemplate]="star" [max]="getMaxStarNum()"
+                      [rate]="details['rating']" [readonly]="true">
+          </ngb-rating>
+        </td>
+      </tr>
+      <tr *ngIf="details['url']">
+        <th>Google Page</th>
+        <td>
+          <a href="{{details['url']}}" target='_blank'>
+            {{details['url']}}
+          </a>
+        </td>
+      </tr>
+      <tr *ngIf="details['website']">
+        <th>Website</th>
+        <td>
+          <a href="{{details['website']}}" target='_blank'>
+            {{details['website']}}
+          </a>
+        </td>
+      </tr>
+      <tr *ngIf="details['opening_hours']">
+        <th>Hours</th>
+        <td>
+      <span
+        *ngIf="details['opening_hours']['open_now']; else closed">
+        Open now: {{dailyOpenHours[localDayOfWeek - 1].hours}}
+      </span>
+          <ng-template #closed>Closed</ng-template>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#openHours">
+            Daily open hours
+          </button>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+</div>
+
+
+  <!-- Modal -->
+  <!--<div class="modal fade" id="openHours" tabindex="-1" role="dialog"-->
+       <!--aria-labelledby="exampleModalCenterTitle" aria-hidden="true"-->
+       <!--*ngIf="details['opening_hours']" data-backdrop="false">-->
+    <!--<div class="modal-dialog modal-dialog-centered" role="document">-->
+      <!--<div class="modal-content">-->
+        <!--<div class="modal-header">-->
+          <!--<h5 class="modal-title" id="exampleModalLongTitle">Open hours</h5>-->
+          <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+            <!--<span aria-hidden="true">&times;</span>-->
+          <!--</button>-->
+        <!--</div>-->
+        <!--<div class="modal-body">-->
+          <!--<table class="table">-->
+            <!--<tr>-->
+              <!--<th>{{ dailyOpenHours[localDayOfWeek - 1].day }}</th>-->
+              <!--<th>{{ dailyOpenHours[localDayOfWeek - 1].hours }}</th>-->
+            <!--</tr>-->
+            <!--<tr *ngFor="let openHours of leftDays">-->
+              <!--<td> {{ openHours.day }}</td>-->
+              <!--<td> {{ openHours.hours }}</td>-->
+            <!--</tr>-->
+          <!--</table>-->
+        <!--</div>-->
+        <!--<div class="modal-footer">-->
+          <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+

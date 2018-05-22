@@ -1,0 +1,42 @@
+<br>
+
+<form #directionForm="ngForm" (ngSubmit)="showDirections()">
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="fromAddress">From</label>
+      <input #fromAddrBox type="text" class="form-control"
+             id="fromAddress" name="fromAddress" required
+             [(ngModel)]="fromAddress" #startAddr="ngModel">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="toAddress">To</label>
+      <input type="text" class="form-control" id="toAddress" readonly
+             value="{{details.name + ', ' + details.formatted_address}}">
+    </div>
+    <div class="form-group col-md-2">
+      <label for="travelMode">Travel Mode</label>
+      <select class="form-control" id="travelMode" name="travelMode"
+              [(ngModel)]="travelMode">
+        <option value="DRIVING">Driving</option>
+        <option value="BICYCLING">Bicycling</option>
+        <option value="TRANSIT">Transit</option>
+        <option value="WALKING">Walking</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label style="visibility: hidden">hidden</label>
+      <button type="submit" class="btn btn-primary" style="margin-left: 1rem"
+              [disabled]="!fromAddress.trim()">
+        Get Directions
+      </button>
+    </div>
+  </div>
+</form>
+
+<button class="btn btn-outline-secondary" (click)="toggleStreetView()">
+  <img [src]="btnImgSrc" width="30">
+</button>
+
+<div #map id="map"></div>
+<div #directionsPanel></div>
+

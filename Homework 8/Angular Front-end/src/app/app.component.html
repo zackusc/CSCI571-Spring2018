@@ -1,0 +1,126 @@
+<div style="text-align: center">
+  <form class="container" id="searchForm" #searchForm="ngForm"
+        (ngSubmit)="onSubmit()">
+    <h4 id="title">Travel and Entertainment Search</h4>
+    <div style="text-align: left">
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="keyword">Keyword<span class="text-danger">*</span></label>
+        <div class="col-md-9">
+          <input class="form-control" type="text" id="keyword"
+                 name="keyword" required [(ngModel)]="placeSearch.keyword"
+                 #keyword="ngModel">
+          <div *ngIf="(!placeSearch.keyword.trim()) && (keyword.dirty || keyword.touched)"
+               class="text-danger">
+            <!--keyword.invalid ||-->
+            Please enter a keyword.
+          </div>
+        </div>
+
+      </div>
+      <!--category dropdown list-->
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="category">Category</label>
+        <div class="col-md-6">
+          <select class="form-control" id="category" name="category"
+                  [(ngModel)]="placeSearch.category">
+            <option *ngFor="let cate of categories" [value]="cate">{{cate}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="distance">Distance (miles)</label>
+        <div class="col-md-6">
+          <input class="form-control" type="text" id="distance" placeholder="10" name="distance" [(ngModel)]="placeSearch.distance">
+        </div>
+      </div>
+
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-md-3">From<span class="text-danger">*</span></legend>
+          <div class="col-md-9">
+            <div class="form-check">
+              <input #radio1 class="form-check-input" type="radio" name="location"
+                     id="radio1" value="here" [checked]="isRadio1Checked"
+                     (click)="checkRadios()">
+              <label class="form-check-label" for="radio1">Current location</label>
+            </div>
+
+            <div class="form-check">
+              <input #radio2 class="form-check-input" type="radio" name="location" id="radio2" value="other" (click)="checkRadios()">
+              <label class="form-check-label" for="radio2">Other. Please specify:</label>
+            </div>
+            <div style="padding-left: 20px">
+              <input #addrBox class="form-control" type="text" id="place"
+                     name="address" placeholder="Enter a location"
+                     [disabled]="addrBoxDisabled" [required]="addrBoxRequired"
+                     [(ngModel)]="placeSearch.address" #address="ngModel">
+              <div *ngIf="(!isRadio1Checked) && (!placeSearch.address.trim()) && (address.dirty || address.touched)"
+                   class="text-danger">
+                Please enter a location.
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <button type="submit" class="btn btn-primary"
+              [disabled]="(!currentLocation) || isOnlySpaces()">
+        <i class="fas fa-search"></i> Search</button>
+      <button type="button" (click)="clearAll()"
+              class="btn btn-outline-secondary text-dark">Clear</button>
+    </div>
+  </form>
+</div>
+
+<br>
+
+<!--<div class="container" id="result-area">-->
+  <!--results tab and favorite tab-->
+  <ngb-tabset type="pills" justify="center">
+    <ngb-tab title="Results" id="resultsTab">
+      <ng-template ngbTabContent>
+        <br>
+        <div class="container">
+          <div class="progress"
+               *ngIf="submitted && (!searchService.searchResults)">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+          </div>
+          <div [@resultsDisplay]="listDisplay">
+            <app-results (onDetailsSearch)="getDetailsAndSwitchView($event)"
+                         (goBackToDetailsEvent)="goBackToDetails()"
+                         [hidden]="showDetails"></app-results>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Favorites" id="favoritesTab">
+      <ng-template ngbTabContent>
+        <br>
+        <div [@favoritesDisplay]="listDisplay">
+          <app-favorites (detailsRequest)="getDetailsAndSwitchView($event)"
+                         (goBackToDetailsEvent)="goBackToDetails()"
+                         [hidden]="showDetails"></app-favorites>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+
+  <!--<div class="progress"-->
+       <!--*ngIf="detailsService.searchTriggered && (!detailsService.details)">-->
+    <!--<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>-->
+  <!--</div>-->
+  <div [@detailsDisplay]="showDetails.toString()">
+    <app-place-details (onReturnToList)="hideDetails()"
+                       [hidden]="!showDetails"></app-place-details>
+  </div>
+
+  <app-open-hours [placeDetails]="detailsService.details"></app-open-hours>
+<!--</div>-->
+
+
+<div #fooMap></div>
+
+
+
+

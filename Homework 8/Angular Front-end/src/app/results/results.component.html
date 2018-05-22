@@ -1,0 +1,78 @@
+<div *ngIf="searchService.searchResults">
+  <div *ngIf="searchService.searchResults.results.length; else warning">
+    <!--Details button-->
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-secondary text-dark mb-1"
+              [disabled]="!detailsService.searchTriggered"
+              (click)="goBackToDetails()">
+        Details <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <tr>
+          <th>#</th>
+          <th>Category</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Favorite</th>
+          <th>Details</th>
+        </tr>
+
+        <tr *ngFor="let result of searchService.searchResults.results; index as i"
+            [class.selected]="result.place_id === detailsService.selectedPlaceId">
+          <td>{{ i + 1 }}</td>
+          <td><img src={{result.icon}} width="60px" height="40px"></td>
+          <td>{{result.name}}</td>
+          <td>{{result.vicinity}}</td>
+          <!--favorite button-->
+          <td>
+            <button type="button" class="btn btn-outline-secondary text-dark"
+                    (click)="changeFavoStatus(i)">
+              <i class="far fa-star"
+                 *ngIf="!isFavorited(i); else lightStar"></i>
+              <ng-template #lightStar>
+                <i class="fas fa-star" style="color:rgb(249,213,86)"></i>
+              </ng-template>
+            </button>
+          </td>
+          <!--details button-->
+          <td>
+            <button type="button"
+                    class="btn btn-outline-secondary text-dark"
+                    (click)="triggerDetailsSearch(i)">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+
+
+    <div class="text-center">
+      <button type="button" class="btn btn-outline-secondary text-dark"
+              *ngIf="searchService.searchResults['page_num'] != 1"
+              (click)="getPrevPage()">
+        previous
+      </button>
+
+      <button type="button" class="btn btn-outline-secondary text-dark"
+              *ngIf="searchService.searchResults['next_page_token']"
+              (click)="getNextPage()">
+        next
+      </button>
+    </div>
+  </div>
+
+  <ng-template #warning>
+    <div class="alert alert-warning" role="alert">
+      No record.
+    </div>
+  </ng-template>
+
+
+</div>
+
+<div #fakeMap></div>

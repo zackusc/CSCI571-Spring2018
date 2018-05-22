@@ -1,0 +1,22 @@
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 1rem;
+  color: white;
+}
+.full {
+  /*color: rgb(219,116,54);*/
+  color: #EB6E00;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  /*color: rgb(219,116,54);*/
+  color: #EB6E00;
+}
+
+.underlayer {
+  visibility: hidden;
+}
+

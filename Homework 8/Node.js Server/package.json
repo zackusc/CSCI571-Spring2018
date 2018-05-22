@@ -1,0 +1,17 @@
+{
+  "name": "place-server",
+  "version": "1.0.0",
+  "description": "Server-side scripts for the travel and entertainment search single-page app.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Zi Li",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "request": "^2.85.0",
+    "yelp-fusion": "^2.0.3"
+  }
+}

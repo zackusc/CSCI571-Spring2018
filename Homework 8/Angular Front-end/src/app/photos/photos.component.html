@@ -1,0 +1,28 @@
+<br>
+
+<div *ngIf="photos">
+  <div class="row justify-content-between">
+    <div class="col-lg-3 photo-column"
+         *ngFor="let photoColumn of photoUrls">
+      <div *ngFor="let photoUrl of photoColumn">
+        <a [href]="photoUrl" target="_blank">
+          <img class="card-img photo" [src]="photoUrl">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!photos" class="alert alert-warning" role="alert">
+  No record.
+</div>
+
+<!--<div class="card-columns">-->
+<!--<div class="card" *ngFor="let photoUrl of photoUrls">-->
+<!--<a [href]="photoUrl" target="_blank">-->
+<!--<img class="card-img" [src]="photoUrl">-->
+<!--</a>-->
+<!--</div>-->
+<!--</div>-->
+
+

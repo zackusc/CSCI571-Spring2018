@@ -1,0 +1,100 @@
+<br>
+
+<!--dropdowns-->
+<div *ngIf="googleReviews.length || yelpReviews.length">
+  <div class="row">
+    <div class="dropdown col-auto">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ reviewTypes[reviewTypeNum] }}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <button class="dropdown-item"
+                *ngFor="let reviewType of reviewTypes; index as i"
+                (click)="setReviewsType(i)">
+          {{ reviewType }}
+        </button>
+      </div>
+    </div>
+
+    <div class="dropdown col-auto">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ orderTypes[orderTypeNum] }}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <button class="dropdown-item"
+                *ngFor="let orderType of orderTypes; index as i"
+                (click)="setOrderType(i)">
+          {{ orderType }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<!--reviews list-->
+<!--<div *ngIf="reviews.length; else warning">-->
+  <!--<div [@reviewType]="reviewType">-->
+    <!--<div class="media" *ngFor="let review of reviews">-->
+      <!--<a [href]="review.author_url" target='_blank'>-->
+        <!--<img class="mr-3" [src]="review.profile_photo_url" style="width: 60px" >-->
+      <!--</a>-->
+      <!--<div class="media-body">-->
+        <!--<h5 class="mt-0">-->
+          <!--<a [href]="review.author_url" target='_blank'>-->
+            <!--{{ review.author_name }}-->
+          <!--</a>-->
+        <!--</h5>-->
+        <!--<ngb-rating [starTemplate]="star" [max]="getMaxStarNum(review.rating)"-->
+                    <!--[rate]="review['rating']" [readonly]="true">-->
+        <!--</ngb-rating>-->
+        <!--{{ review.time_formatted }}-->
+        <!--<p>{{ review.text }}</p>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+
+<div *ngIf="reviews.length; else warning">
+  <div [@reviewType]="reviewType">
+    <div class="review-item row no-gutters"
+         *ngFor="let review of reviews">
+      <div class="col-lg-1 col-md-2 col-sm-3 col-3">
+        <a [href]="review.author_url" target='_blank'
+           *ngIf="review.profile_photo_url">
+          <img class="mr-3" [src]="review.profile_photo_url" style="width: 60px" >
+        </a>
+      </div>
+      <div class="col-lg-11 col-md-10 col-sm-9 col-9">
+        <h6 class="mt-0">
+          <a [href]="review.author_url" target='_blank'>
+            {{ review.author_name }}
+          </a>
+        </h6>
+        <ngb-rating [starTemplate]="star" [max]="getMaxStarNum(review.rating)"
+                    [rate]="review['rating']" [readonly]="true">
+        </ngb-rating>
+        <span style="color: grey">
+          {{ review.time_formatted }}
+        </span>
+        <p>{{ review.text }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #warning>
+  <div class="alert alert-warning" role="alert">
+    No record.
+  </div>
+</ng-template>
+
+<ng-template #star let-fill="fill">
+  <span class="star" [class.full]="fill === 100">
+    <span class="half" [style.width.%]="fill">&#9733;</span>
+    <span class="underlayer">&#9733;</span>
+  </span>
+</ng-template>

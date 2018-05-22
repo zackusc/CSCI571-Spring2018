@@ -1,0 +1,11 @@
+tr.selected {
+  background: rgb(250,223,159);
+}
+
+tr.selected button{
+  background: white;
+}
+
+/*.table {*/
+  /*display: block !important;*/
+/*}*/
